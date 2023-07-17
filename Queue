@@ -1,0 +1,109 @@
+package Queue;
+
+public class Queue {
+	private int arr[];
+	private int front;
+	private int rear;
+	private int size;
+	public Queue()
+	{
+		arr=new int[5];
+		front=-1;
+		rear=-1;
+		size=0;
+	}
+	public Queue(int capacity)
+	{
+		arr=new int[capacity];
+		front=-1;
+		rear=-1;
+		size=0;
+	}
+	public int size()
+	{
+		return size;
+	}
+	public boolean isEmpty()
+	{
+		if(front==-1&&rear==-1)
+			return true;
+		return false;
+	}
+	public void enqueue(int data)throws QueueFullException
+	{
+		if(rear==(arr.length-1))
+			throw new QueueFullException();
+		rear++;
+		arr[rear]=data;
+		if(size==0)
+			front=0;
+		size++;
+	}
+	public void dequeue()throws QueueEmptyException
+	{
+		if(size==0)
+			throw new QueueEmptyException();
+		System.out.println("Element deleted: "+arr[front]);
+		front++;
+		size--;
+		if(size==0)
+		{
+			front=-1;
+			rear=-1;
+		}
+	}
+
+}
+
+//Calller Class
+import java.io.*;
+public class QueueUse {
+	public static void main(String args[])throws IOException
+	{
+		Queue obj=new Queue(4);
+		try
+		{
+			System.out.println(obj.isEmpty());
+			obj.enqueue(1);
+			obj.enqueue(2);
+			obj.enqueue(3);
+			obj.enqueue(4);
+//			obj.enqueue(5);
+			System.out.println(obj.isEmpty());
+			obj.dequeue();
+			obj.dequeue();
+			obj.dequeue();
+			obj.dequeue();
+//			obj.dequeue();
+			
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
+
+}
+// Exception Classes
+package Queue;
+
+public class QueueEmptyException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+}
+
+package Queue;
+
+public class QueueFullException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+}
