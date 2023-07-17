@@ -1,0 +1,127 @@
+package HashMap;
+
+public class MapNode<K,V> {
+	K key;
+	V value;
+	MapNode<K,V> next;
+	public MapNode(K key,V value)
+	{
+		this.key=key;
+		this.value=value;
+	}
+	
+
+}
+
+public class Map<K,V> {
+	ArrayList<MapNode<K,V>> bucket;
+	int count;
+	 int numBuckets;
+	public Map()
+	{
+		bucket=new ArrayList<>();
+		numBuckets=20;
+		for(int i=0;i<numBuckets;i++)
+		{
+			bucket.add(null);
+		}
+	}
+	private int getBucketIndex(K key)
+	{
+		int hc=key.hashCode();
+		System.out.println(hc);
+		int index=hc%numBuckets;
+		return index;
+	}
+	public void insert(K key,V value)
+	{
+		int bucketIndex=this.getBucketIndex(key);
+		MapNode<K,V> head=bucket.get(bucketIndex);
+		while(head!=null)
+		{
+			if(head.key.equals(key))
+			{
+				head.value=value;
+			}
+		}
+		head=bucket.get(bucketIndex);
+		MapNode<K,V> newNode=new MapNode<K,V>(key,value);
+		newNode.next=head;
+		System.out.println(bucketIndex);
+		bucket.set(bucketIndex, newNode);
+		count++;
+		double loadFactor=count/numBuckets;
+		if(loadFactor>0.7)
+		 this.rehash();
+		
+	}
+	public int size()
+	{
+		return count;
+	}
+	public V getValue(K key)
+	{
+		int bucketIndex=this.getBucketIndex(key);
+		MapNode<K,V> head=bucket.get(bucketIndex);
+		while(head!=null)
+		{
+			if(head.key.equals(key))
+				return head.value;
+			head=head.next;
+		}
+		return null;
+	}
+	public V removeKey(K key)
+	{
+		int bucketIndex=this.getBucketIndex(key);
+		MapNode<K,V> head=bucket.get(bucketIndex),prev=null;
+		while(head!=null)
+		{
+			if(head.key.equals(key))
+			{
+				if(prev==null)
+				{
+					bucket.set(bucketIndex, head.next);
+					return head.value;}
+				prev.next=head.next;
+				return head.value;
+			}
+			prev=head;
+			head=head.next;
+		}
+		return null;
+	}
+	private void rehash()
+	{
+		ArrayList<MapNode<K,V>> temp=bucket;
+		bucket=new ArrayList<>();
+		for(int i=0;i<2*numBuckets;i++)
+		{
+			bucket.add(null);
+		}
+		numBuckets=2*numBuckets;
+		for(int i=0;i<temp.size();i++)
+		{
+			MapNode<K,V> head=bucket.get(i);
+			while(head!=null)
+			{
+				this.insert(head.key,head.value);
+				head=head.next;
+			}
+		}
+	}
+	
+
+}
+
+
+public class HashMapUse {
+	public static void main(String args[])
+	{
+		Map<String,Integer> obj=new Map<>();
+		obj.insert("abc",23);
+		obj.insert("dxyz",44);
+		System.out.println(obj.getValue("dxyz"));
+	}
+
+}
