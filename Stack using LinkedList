@@ -1,0 +1,51 @@
+package StackUsingLL;
+import Learning.Node;
+public class StackUsingLL {
+	
+private Node head;
+int size;
+public StackUsingLL()
+{
+	head=null;
+	size=0;
+}
+public boolean isEmpty()
+{
+	return size==0;
+}
+public int size()
+{
+	return size;
+}
+public void push(int data)
+{
+	Node newNode =new Node(data,null);
+	newNode.next=head;
+	head=newNode;
+	size++;
+	
+}
+public void pop()
+{
+	if(head==null)
+		System.out.println("Stack Underflow");
+	System.out.println("Element poped: "+head.data);
+	head=head.next;
+	size--;
+}
+}
+
+// Caller Class
+public class StackUsingLLUse {
+	public static void main(String args[])
+	{
+		StackUsingLL obj =new StackUsingLL();
+		System.out.println(obj.isEmpty());
+		obj.push(1);
+		obj.push(2);
+		obj.push(3);
+		obj.pop();
+		
+	}
+
+}
